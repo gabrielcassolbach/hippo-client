@@ -10,6 +10,7 @@
 
 - pip install -r requirements.txt
 
--- Passo 4: toda vez que instalar uma dependência (primeiramente, entre no .venv)
+-- Passo 4: toda vez que instalar uma dependência (primeiramente, entre no .venv) nova ao projeto, gere um
+novo arquivo requirements utilizando o comando abaixo:
 
 - pip freeze > .requirements.txt
