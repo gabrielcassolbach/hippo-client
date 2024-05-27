@@ -1,12 +1,12 @@
--- Passo 1: criar um .venv
+-- Passo 1: criar um .venv:
 
 - python -m venv .venv
 
--- Passo 2: entrar no .venv
+-- Passo 2: entrar no .venv:
 
 - source .venv/bin/activate
 
--- Passo 3: instalar todas as dependências do projeto
+-- Passo 3: instalar todas as dependências do projeto:
 
 - pip install -r requirements.txt
 
