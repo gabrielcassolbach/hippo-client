@@ -13,4 +13,4 @@
 -- Passo 4: toda vez que instalar uma dependência nova ao projeto, gere um
 novo arquivo requirements utilizando o comando abaixo:
 
-- pip freeze > .requirements.txt
+- pip freeze > requirements.txt
