@@ -25,9 +25,10 @@ def connect_to_database(connection_data):
             port = connection_data['port']
         )
         if conn.is_connected():
+            print("Conexão bem-sucedida")
             return conn
     except mysql.connector.Error as err:
-        messagebox.showerror("Erro", f"Erro ao conectar: {err}")
+        print(f"Erro: {err}")
         return None
 
 def query_database(conn, query):

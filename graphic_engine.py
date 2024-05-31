@@ -33,6 +33,3 @@ def save_data(connection_data):
     with open('connection_data.json', 'w') as file:
         json.dump(connection_data, file, indent=4)
     print("connection data stored")
-
-
-
