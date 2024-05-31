@@ -33,15 +33,27 @@ def connect_to_database(connection_data):
 
 def query_database(conn, query):
     cursor = conn.cursor()
-    print(cursor)
     cursor.execute(query)
     results = cursor.fetchall()
-    for row in results:
-        print(row)
+    print_tables(results)
     cursor.close()
+
+def print_line(size):
+    for i in range(1, int(size)):
+        print("--", end="")
+    print("")
+
+def print_tables(results):
+    print_line(25)
+    for row in results:
+        for column in row:
+            print("  | ", end = " ")
+            print(column, end = "\t")
+        print("")
+    print_line(25)
     
 def execute_mysql_query(conn):
-    query = input("Digite sua consulta SQL:")
+    query = input("\t type your query: ")
     query_database(conn, query)
     close_connection(conn)
 

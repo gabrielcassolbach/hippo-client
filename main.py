@@ -3,8 +3,10 @@ from graphic_engine import *
 
 def main():
     while True:
+        print_line(30)
         render_menu()
-        option = int(input("Type the Option:"))
+        option = int(input("\t ....Type the Option: "))
+        print_line(30)
         if option == 1: 
             connection_data = get_data()
             mysql_connection(connection_data)

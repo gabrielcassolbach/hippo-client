@@ -1,10 +1,10 @@
 import json
 
 def render_menu():
-    print("type 1 to psql")
-    print("type 2 to mysql")
-    print("type 3 to leave")
-    print("type 5 to use stored connection")
+    print("\t type 1 to psql \t")
+    print("\t type 2 to mysql \t")
+    print("\t type 3 to leave \t")
+    print("\t type 5 to use stored connection \t")
 
 def get_data():
     connection_dict = {}
