@@ -1,25 +1,24 @@
-Projeto: montar um cliente próprio de banco de dados. 
+Projeto: 
+-> Conexões com os dois servidores efetuadas.
+-> Implementar um gerenciador gráfico que permite a visualização do menu, das tabelas e das queries.
 
-1 -> Conectar-se com o PostgreeSQL e MySql.
-2 -> Gravar dados de conexão
-{
-    -> dados de conexão com o banco devem ser salvos após serem
-    setados.
-}
-3 -> Mostrar graficamente (em árvore) as tabelas e views do banco
-de dados.
+-> Parte gráfica:
+. Implementar um menu inicial.
+. Implementar um menu.
 
-4 -> Mostrar também os campos da tabela e seus tipos e tamanhos
-Apontar as chaves primárias de cada tabela
+Permitir a conexão a bancos de dados PostgreSQL e MySQL
 
-5 -> Consultar os dados da tabela
+    Gravar dados de conexão -> Correto.
+
+    Mostrar graficamente (em árvore) as tabelas e views do banco de dados
+
+    Mostrar também os campos da tabela e seus tipos e tamanhos
+        Apontar as chaves primárias de cada tabela
+
+    Consultar os dados da tabela
 
     Dados mostrados em estrutura de tabela
-    
     Mostrar todos os dados (limitado a 1000 registros - configurável)
-    
     Permitir consultas gerais (digitando o SQL diretamente)
 
     Exportação de dados das tabelas e das consultas em CSV ou JSON
-
-
