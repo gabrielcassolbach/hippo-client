@@ -1,30 +1,42 @@
 from connect import *
-
+from graphic_engine import *
 
 def main():
-    server = input("mysql os psql")
+    while True:
+        render_menu()
+        option = int(input("Type the Option:"))
+        if option == 1: 
+            connection_data = get_data()
+            mysql_connection(connection_data)
+            break
+        if option == 2: 
+            connection_data = get_data()
+            psql_connection(connection_data)
+            break
+        if option == 3:
+            print("Leaving...")
+            break
+        if option == 4:
+            connection_data = get_data()
+            save_data(connection_data)
+            break
+        if option == 5:
+            connection_data = fetch_data()
+            if(connection_data['management-system'] == "MySQL"):
+                mysql_connection(connection_data)
+            else: 
+                psql_connection(connection_data)
+            break
 
-    conn2 = connect_to_database_psql()
+def mysql_connection(connection_data):
+    conn = connect_to_database(connection_data)           
+    if(conn):
+        execute_mysql_query(conn)
 
-    #conn = connect_to_database()
-    #if conn:
-    #    while True:
-    #        query = input("Digite sua consulta SQL(sair para encerrar o programa): ")
-    #        if query.lower() == 'sair':
-    #            break
-    #        query_database(conn, query)
-    #   close_connection(conn)
-
+def psql_connection(connection_data):
+    conn = connect_to_database(connection_data)           
+    if(conn):
+        execute_mysql_query(conn)
 
 if __name__ == "__main__":
     main()
-
-# criar as conexões com os servidores. (bibliotecas)
-
-# primeiramente -> mysql.
-
-# biblioteca "gráfica" => puxar os dados do servidor e filtrar 
-
-# pela nossa biblioteca. 
-
-# 

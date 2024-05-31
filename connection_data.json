@@ -1,0 +1,8 @@
+{
+    "management-system": "MySQL",
+    "host": "localhost",
+    "user": "root",
+    "port": "3306",
+    "password": "password",
+    "database": "University"
+}
