@@ -7,7 +7,36 @@ def main():
         render_menu()
         option = int(input("\t ....Type the Option: "))
         print_line(30)
-        if option == 1: 
+
+        if option == 10:
+            connection_data = get_data()
+
+            conn = connect_to_database(connection_data) #Teste           
+
+            info(conn, 'department')
+
+
+        if option == 30:
+            connection_data = get_data()
+
+            conn = connect_to_database(connection_data) #Teste           
+
+            export_to_csv(conn, 'department')
+
+
+
+
+        if option == 40:
+            connection_data = get_data()
+
+            conn = connect_to_database(connection_data) #Teste           
+
+            export_to_json(conn, 'department')
+
+
+
+
+        if option == 1:
             connection_data = get_data()
             mysql_connection(connection_data)
             break
