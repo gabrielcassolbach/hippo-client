@@ -142,3 +142,21 @@ def execute_mysql_query(conn):
 
 def close_connection(conn):
     conn.close()
+
+
+
+
+
+def tree(conn):
+    cursor = conn.cursor()
+    cursor.execute("SHOW TABLES")
+    tabelas = cursor.fetchall()
+    print("Banco de Dados MySQL:")
+    for tabela in tabelas:
+        print(f"|-- {tabela[0]}")
+        cursor.execute(f"DESCRIBE {tabela[0]}")
+        colunas = cursor.fetchall()
+        for coluna in colunas:
+            print(f"    |-- {coluna[0]}")
+    cursor.close()
+

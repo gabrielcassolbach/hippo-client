@@ -8,6 +8,12 @@ def main():
         option = int(input("\t ....Type the Option: "))
         print_line(30)
 
+        if option == 15:
+            connection_data = get_data()
+            conn = connect_to_database(connection_data)
+            tree(conn)
+
+
         if option == 10:
             connection_data = get_data()
 
