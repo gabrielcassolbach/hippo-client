@@ -10,15 +10,15 @@ Permitir a conexão a bancos de dados PostgreSQL e MySQL
 
     Gravar dados de conexão -> Correto.
 
-    Mostrar graficamente (em árvore) as tabelas e views do banco de dados
+    Mostrar graficamente (em árvore) as tabelas e (views) do banco de dados - Conferir Views - semi pronto
 
     Mostrar também os campos da tabela e seus tipos e tamanhos
-        Apontar as chaves primárias de cada tabela
+        Apontar as chaves primárias de cada tabela -> pronto
 
-    Consultar os dados da tabela
+    Consultar os dados da tabela - pronto
 
     Dados mostrados em estrutura de tabela
     Mostrar todos os dados (limitado a 1000 registros - configurável)
-    Permitir consultas gerais (digitando o SQL diretamente)
-
-    Exportação de dados das tabelas e das consultas em CSV ou JSON
+    Permitir consultas gerais (digitando o SQL diretamente) - quase pronto -> formatar graficamente
+ 
+    Exportação de dados das tabelas e das consultas em CSV ou JSON - pronto.

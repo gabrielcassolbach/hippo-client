@@ -1,6 +1,8 @@
 import mysql.connector
 import csv, json
 from decimal import Decimal
+from graphic_engine import print_line
+from colorama import init, Fore, Back, Style
 #import psycopg2
 
 #def connect_to_database_psql(connection_data):
@@ -36,39 +38,29 @@ def connect_to_database(connection_data):
 def query_database(conn, query):
     cursor = conn.cursor()
     cursor.execute(query)
+    num_fields = len(cursor.description)
+    field_names = [i[0] for i in cursor.description]
     results = cursor.fetchall()
-    print_tables(results)
+    print_tables(results, field_names)
+    #print_tables2(conn, query)
+    #info(conn, "classroom")
     cursor.close()
 
-def print_line(size):
-    for i in range(1, int(size)):
-        print("--", end="")
-    print("")
-
-def print_tables(results):
-    print_line(25)
+def print_tables(results, field_names):
+    print(Fore.RED)
+    for field in field_names:
+        print("  | ", end = " ")
+        print(field, end = "\t")
+    print(Fore.CYAN)
     for row in results:
         for column in row:
             print("  | ", end = " ")
             print(column, end = "\t")
         print("")
-    print_line(25)
-    
-def print_tables2(conn, table):
-    query = f"select * from {table}"
+    print_line(len(results))
+
+def info(conn, table):        
     cursor = conn.cursor()
-    cursor.execute(query)
-    columns_names = [i[0] for i in cursor.description]
-    print("\t".join(columns_names))
-    for row in cursor.fetchall():
-            print("\t".join(str(cell) for cell in row))
-    cursor.close()
-
-
-
-def info(conn, table):        # Teste
-    cursor = conn.cursor()
-
     query = (
         "SELECT COLUMN_NAME, COLUMN_TYPE "
         "FROM information_schema.COLUMNS "
@@ -86,39 +78,22 @@ def info(conn, table):        # Teste
     conn.close()
 
 
-def export_to_csv(conn, table):
+def export_to_csv(conn, query):
     cursor = conn.cursor()
-
-    
-    query = f"SELECT * FROM {table}"
     cursor.execute(query)
-
-    
     column_names = [i[0] for i in cursor.description]
-
-    
     with open('file.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
-        
         csvwriter.writerow(column_names)
-        
         for row in cursor.fetchall():
             csvwriter.writerow(row)
-
-    
     cursor.close()
     conn.close()
 
-def export_to_json(conn, table):
+def export_to_json(conn, query):
     cursor = conn.cursor()
-
-    
-    query = f"SELECT * FROM {table}"
     cursor.execute(query)
-
-    
     column_names = [i[0] for i in cursor.description]
-
     data = []
     for row in cursor.fetchall():
         row_dict = dict(zip(column_names, row))
@@ -126,11 +101,8 @@ def export_to_json(conn, table):
             if isinstance(row_dict[key], Decimal):
                 row_dict[key] = str(row_dict[key])
         data.append(row_dict)
-
-    
     with open('file.json', 'w') as jsonfile:
         json.dump(data, jsonfile, indent=4)
-        
     cursor.close()
     conn.close()
 
@@ -138,97 +110,32 @@ def export_to_json(conn, table):
 def execute_mysql_query(conn):
     query = input("\t type your query: ")
     query_database(conn, query)
+    while True: 
+        options = int(input("\t type 1 to export data to csv \n\t type 2 to export data to json \n\t type 3 to do nothing: \n"))
+        if(options == 1): 
+            export_to_csv(conn, query)
+            break        
+        if(options == 2):
+            export_to_json(conn, query)
+            break      
+        if(options == 3):
+            print("Leaving...")
+            break
     close_connection(conn)
 
 def close_connection(conn):
     conn.close()
 
-
-
-
-
-def tree(conn):
+def tree_new(conn):
     cursor = conn.cursor()
     cursor.execute("SHOW TABLES")
-    tabelas = cursor.fetchall()
-    print("Banco de Dados MySQL:")
-    for tabela in tabelas:
-        print(f"|-- {tabela[0]}")
-        cursor.execute(f"DESCRIBE {tabela[0]}")
-        colunas = cursor.fetchall()
-        for coluna in colunas:
-            print(f"    |-- {coluna[0]}")
+    tables = cursor.fetchall()
+    print("Databases: ")
+    for table in tables:
+        print(f"|-- {table[0]}")
+        cursor.execute(f"DESCRIBE {table[0]}")
+        columns = cursor.fetchall()
+        for column in columns:
+            primary_key = ' (PK)' if column[3] == 'PRI' else ''
+            print(f"    |-- {column[0]}{primary_key}")
     cursor.close()
-
-
-def imprimir_hierarquia_mysql(conexao):
-    cursor = conexao.cursor()
-    cursor.execute("SHOW TABLES")
-    tabelas = cursor.fetchall()
-    print("Banco de Dados MySQL:")
-    for tabela in tabelas:
-        print(f"|-- {tabela[0]}")
-        cursor.execute(f"DESCRIBE {tabela[0]}")
-        colunas = cursor.fetchall()
-        for coluna in colunas:
-            chave_primaria = ' (PK)' if coluna[3] == 'PRI' else ''
-            print(f"    |-- {coluna[0]}{chave_primaria}")
-    cursor.close()
-
-
-
-
-def logo():
-    hippo = """
-             __
- 
-                  ,-.____,-.
-                  /   ..    |
-                 /_        _|
-                |'o'      'o'|
-               / ____________ |
-             , ,'    `--'    '. .
-            _| |              | |_
-          /  ' '              ' '  |
-         (    `,',__________.','    )
-          \_    ` ._______, '     _/
-             |                  |
-             |    ,-.    ,-.    |
-              \      ).,(      /
-               \___/    \___/
-                                
-        """
-    print(hippo)
-
-
-
-
-
-
-def logo1():
-    hippo = """
-
-        HIPPO DB
-
- ⠀⠀⠀⠀⠀⠀⠀⠀⣞⠛⠓⢦⡀⠀⠀⠀⠀⢀⣤⣤⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⢉⡽⠟⠊⣩⠉⠑⢲⠞⡹⢊⣩⡇⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⣠⢏⠤⢤⠰⠁⣀⣀⠀⠀⢹⠿⠤⢤⣤⠶⠒⠋⠉⠁⠀⠀⠀⠀⠀⠀⠀⠉⠳⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣀⣀⣴⠃⣿⣿⡿⠀⢸⣽⣷⡇⠀⠈⠣⡀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⣠⠖⠋⠉⠀⢀⡭⠋⠉⠛⠢⢄⡸⠿⠟⠀⠀⠀⠀⠘⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣆⠀⠀⠀⠀⠀⠀⠀
-⡼⠟⠱⠀⠀⢠⠋⠀⠀⠀⣠⡀⠀⠈⠑⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢆⠀⠸⡀⠀⠀⠀⠀⠀⠀
-⡇⠀⠀⠀⠀⠛⠀⠀⠀⠀⠱⠿⠀⠀⠀⠀⣀⠠⠄⠀⠀⠸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢃⠀⡇⠀⠀⠀⠀⠀⠀
-⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡆⠀⠀⡰⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⡇⠀⠀⠀⠀⠀⠀
-⢹⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡧⠔⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⣷⠀⠀⠀⠀⠀⠀
-⠀⢯⣙⣲⠦⢤⣀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠇⣸⡿⣤⡤⠤⢴⡶⣧
-⠀⠀⠀⠀⠀⠀⠀⠉⠓⠲⣤⠤⠒⢲⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠎⢠⠇⠙⢿⣦⠄⣀⡴⠁
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢯⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠋⠀⢸⠀⠀⠀⠈⠉⠁⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⡲⢄⡀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠀⢀⡠⠊⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢷⠀⠉⠒⢤⣄⣀⠀⢱⠀⠀⠀⠀⠀⡇⠀⣀⣠⠴⠒⣿⠀⠀⠀⠀⠀⣸⣆⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⢹⠈⠉⢹⡀⠀⠀⠀⠀⣟⠉⠁⠀⠀⠀⠹⣆⡔⠢⣰⣒⡷⠏⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⡀⠀⠀⠀⠈⡇⠀⠸⡇⠀⠀⠀⠀⢹⡀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⠷⣋⡉⠦⠴⠃⠀⠀⡇⠀⠀⠀⠀⢸⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣍⣷⣎⣩⣿⡃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
- 
-                                
-        """
-    print(hippo)

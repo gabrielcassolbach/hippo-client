@@ -1,10 +1,21 @@
 import json
+from colorama import init, Fore, Back, Style
 
 def render_menu():
-    print("\t type 1 to psql \t")
-    print("\t type 2 to mysql \t")
+    print_line(30)
+    print("\t type 1 to myql \t")
+    print("\t type 2 to psql \t")
     print("\t type 3 to leave \t")
-    print("\t type 5 to use stored connection \t")
+    print_line(30)
+
+def render_logo():
+    print(Fore.CYAN + "")
+    logo1()
+
+def print_line(size):
+    for i in range(1, int(size)):
+        print("--", end="")
+    print("")
 
 def get_data():
     connection_dict = {}
@@ -14,10 +25,16 @@ def get_data():
     connection_dict['port'] = input("type your port: ")
     connection_dict['password'] = input("type your password: ")
     connection_dict['database'] = input("type your database name: ")
-    choice = int(input("type 1 to save data or 0 otherwise"))
+    choice = int(input("type 1 to save data or 0 otherwise: "))
     if(choice == 1):
         save_data(connection_dict)
     return connection_dict
+
+def render_options_menu():
+    print_line(30)
+    print("\t type 1 to database tree \t")
+    print("\t type 2 to run a query \t")
+    print_line(30)
     
 def fetch_data():
     try:
@@ -33,3 +50,28 @@ def save_data(connection_data):
     with open('connection_data.json', 'w') as file:
         json.dump(connection_data, file, indent=4)
     print("connection data stored")
+
+def logo1():
+    hippo = """
+        HIPPO DB
+
+ ⠀⠀⠀⠀⠀⠀⠀⠀⣞⠛⠓⢦⡀⠀⠀⠀⠀⢀⣤⣤⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢉⡽⠟⠊⣩⠉⠑⢲⠞⡹⢊⣩⡇⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣠⢏⠤⢤⠰⠁⣀⣀⠀⠀⢹⠿⠤⢤⣤⠶⠒⠋⠉⠁⠀⠀⠀⠀⠀⠀⠀⠉⠳⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣀⣀⣴⠃⣿⣿⡿⠀⢸⣽⣷⡇⠀⠈⠣⡀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⣠⠖⠋⠉⠀⢀⡭⠋⠉⠛⠢⢄⡸⠿⠟⠀⠀⠀⠀⠘⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣆⠀⠀⠀⠀⠀⠀⠀
+⡼⠟⠱⠀⠀⢠⠋⠀⠀⠀⣠⡀⠀⠈⠑⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢆⠀⠸⡀⠀⠀⠀⠀⠀⠀
+⡇⠀⠀⠀⠀⠛⠀⠀⠀⠀⠱⠿⠀⠀⠀⠀⣀⠠⠄⠀⠀⠸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢃⠀⡇⠀⠀⠀⠀⠀⠀
+⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡆⠀⠀⡰⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⡇⠀⠀⠀⠀⠀⠀
+⢹⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡧⠔⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⣷⠀⠀⠀⠀⠀⠀
+⠀⢯⣙⣲⠦⢤⣀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠇⣸⡿⣤⡤⠤⢴⡶⣧
+⠀⠀⠀⠀⠀⠀⠀⠉⠓⠲⣤⠤⠒⢲⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠎⢠⠇⠙⢿⣦⠄⣀⡴⠁
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢯⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠋⠀⢸⠀⠀⠀⠈⠉⠁⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⡲⢄⡀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠀⢀⡠⠊⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢷⠀⠉⠒⢤⣄⣀⠀⢱⠀⠀⠀⠀⠀⡇⠀⣀⣠⠴⠒⣿⠀⠀⠀⠀⠀⣸⣆⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⢹⠈⠉⢹⡀⠀⠀⠀⠀⣟⠉⠁⠀⠀⠀⠹⣆⡔⠢⣰⣒⡷⠏⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⡀⠀⠀⠀⠈⡇⠀⠸⡇⠀⠀⠀⠀⢹⡀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⠷⣋⡉⠦⠴⠃⠀⠀⡇⠀⠀⠀⠀⢸⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣍⣷⣎⣩⣿⡃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀                 
+        """
+    print(hippo)
