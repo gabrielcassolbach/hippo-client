@@ -68,7 +68,7 @@ def mysql_connection(connection_data):
                 print(Fore.CYAN)
     
 def psql_connection(connection_data):
-    conn = connect_to_database(connection_data)           
+    conn = connect_to_database_psql(connection_data)           
     if(conn):
         execute_mysql_query(conn)
 

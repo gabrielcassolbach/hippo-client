@@ -1,23 +1,26 @@
 import mysql.connector
+import psycopg2
 import csv, json
 from decimal import Decimal
 from graphic_engine import print_line
 from colorama import init, Fore, Back, Style
-#import psycopg2
 
-#def connect_to_database_psql(connection_data):
-#    try:
-#        conn2 = psycopg2.connect(
-#            host = connection_data['host'],
-#            user = connection_data['user'],
-#            password = connection_data['password'],
-#            database = connection_data['database'],
-#            port = connection_data['port']
-#        )
-#        return conn2
-#    except psycopg2.DatabaseError as err:
-#        print(f"Erro: {err}")
-#        return None
+def connect_to_database_psql(connection_data):
+    try: 
+        conn2 = psycopg2.connector.connect(
+            host = connection_data['host'],
+            user = connection_data['user'],
+            password = connection_data['password'],
+            database = connection_data['database'],
+            port = connection_data['port']
+        )
+        if(conn2.is_connected()):
+            print("Conexão bem-sucedida")
+            return conn2
+    except psycopg2.Error as err:
+        print(Fore.RED + f"Erro: {err}")
+        print(Fore.CYAN)
+        return None
 
 def connect_to_database(connection_data):
     try:
