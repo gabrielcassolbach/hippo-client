@@ -1,5 +1,6 @@
 from connect import *
 from graphic_engine import *
+from colorama import init, Fore, Back, Style
 
 def main():
     while True:
@@ -8,10 +9,16 @@ def main():
         option = int(input("\t ....Type the Option: "))
         print_line(30)
 
+        if option == 100:
+            print(Fore.CYAN + "")
+            #print(Back.YELLOW + "Este texto tem fundo amarelo")
+            #print(Style.BRIGHT + "Este texto é dim")
+            logo1()
+            print(Style.RESET_ALL + "Este texto volta ao normal")
         if option == 15:
             connection_data = get_data()
             conn = connect_to_database(connection_data)
-            tree(conn)
+            imprimir_hierarquia_mysql(conn)
 
 
         if option == 10:
