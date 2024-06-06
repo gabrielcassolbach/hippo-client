@@ -1,24 +1,4 @@
-Projeto: 
--> Conexões com os dois servidores efetuadas.
--> Implementar um gerenciador gráfico que permite a visualização do menu, das tabelas e das queries.
-
--> Parte gráfica:
-. Implementar um menu inicial.
-. Implementar um menu.
-
-Permitir a conexão a bancos de dados PostgreSQL e MySQL
-
-    Gravar dados de conexão -> Correto.
-
-    Mostrar graficamente (em árvore) as tabelas e (views) do banco de dados - Conferir Views - semi pronto
-
-    Mostrar também os campos da tabela e seus tipos e tamanhos
-        Apontar as chaves primárias de cada tabela -> pronto
-
-    Consultar os dados da tabela - pronto
-
-    Dados mostrados em estrutura de tabela
-    Mostrar todos os dados (limitado a 1000 registros - configurável)
-    Permitir consultas gerais (digitando o SQL diretamente) - quase pronto -> formatar graficamente
- 
-    Exportação de dados das tabelas e das consultas em CSV ou JSON - pronto.
+Tratamento de erros -> testar, mas, a princípio, está pronto.
+PostgreSQL 
+Views - conferir
+Mostrar todos os dados (limitado a 1000 registros - configurável)

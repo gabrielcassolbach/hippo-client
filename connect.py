@@ -32,22 +32,32 @@ def connect_to_database(connection_data):
             print("Conexão bem-sucedida")
             return conn
     except mysql.connector.Error as err:
-        print(f"Erro: {err}")
+        print(Fore.RED + f"Erro: {err}")
+        print(Fore.CYAN)
         return None
 
 def query_database(conn, query):
+    if(query == ""): 
+        print(Fore.RED + "invalid query")
+        print(Fore.CYAN)
+        return 0
     cursor = conn.cursor()
-    cursor.execute(query)
+    try:
+        cursor.execute(query) 
+    except mysql.connector.Error as err:
+        print(Fore.RED + "invalid query")
+        print(Fore.CYAN)
+        cursor.close()
+        return 0
     num_fields = len(cursor.description)
     field_names = [i[0] for i in cursor.description]
     results = cursor.fetchall()
     print_tables(results, field_names)
-    #print_tables2(conn, query)
-    #info(conn, "classroom")
     cursor.close()
+    return 1
 
 def print_tables(results, field_names):
-    print(Fore.RED)
+    print(Fore.GREEN)
     for field in field_names:
         print("  | ", end = " ")
         print(field, end = "\t")
@@ -57,26 +67,7 @@ def print_tables(results, field_names):
             print("  | ", end = " ")
             print(column, end = "\t")
         print("")
-    print_line(len(results))
-
-def info(conn, table):        
-    cursor = conn.cursor()
-    query = (
-        "SELECT COLUMN_NAME, COLUMN_TYPE "
-        "FROM information_schema.COLUMNS "
-        "WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s"
-    )
-    cursor.execute(query, ('University', table))
-    print("Column Name\tData Type")
-    print("---------------------------")
-    for row in cursor.fetchall():
-        column_name = row[0]
-        data_type = row[1]
-        print(f"{column_name}\t{data_type}")
-    
-    cursor.close()
-    conn.close()
-
+    print("\n")
 
 def export_to_csv(conn, query):
     cursor = conn.cursor()
@@ -106,24 +97,27 @@ def export_to_json(conn, query):
     cursor.close()
     conn.close()
 
-
 def execute_mysql_query(conn):
     query = input("\t type your query: ")
-    query_database(conn, query)
+    val = query_database(conn, query)
+    while val != 1: 
+        query = input("\t type your query: ")
+        val = query_database(conn, query)
     while True: 
-        options = int(input("\t type 1 to export data to csv \n\t type 2 to export data to json \n\t type 3 to do nothing: \n"))
-        if(options == 1): 
-            export_to_csv(conn, query)
-            break        
-        if(options == 2):
-            export_to_json(conn, query)
-            break      
-        if(options == 3):
-            print("Leaving...")
-            break
-    close_connection(conn)
-
-def close_connection(conn):
+        print("Do you to store your query data? \n")
+        options = (input("\t -- 1 to export data to csv \n\t -- 2 to export data to json \n\t -- 3 to do nothing: \n"))
+        match(options): 
+            case "1":
+                export_to_csv(conn, query)
+                break        
+            case "2":
+                export_to_json(conn, query)
+                break      
+            case "3":
+                break
+            case _: 
+                print(Fore.RED + "invalid input...")
+                print(Fore.CYAN)
     conn.close()
 
 def tree_new(conn):
@@ -136,6 +130,7 @@ def tree_new(conn):
         cursor.execute(f"DESCRIBE {table[0]}")
         columns = cursor.fetchall()
         for column in columns:
+            column_type = column[1]
             primary_key = ' (PK)' if column[3] == 'PRI' else ''
-            print(f"    |-- {column[0]}{primary_key}")
+            print(f"    |-- {column[0]}:{column_type}{primary_key}")
     cursor.close()

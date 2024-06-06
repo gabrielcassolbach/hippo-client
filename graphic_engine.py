@@ -3,9 +3,10 @@ from colorama import init, Fore, Back, Style
 
 def render_menu():
     print_line(30)
-    print("\t type 1 to myql \t")
-    print("\t type 2 to psql \t")
-    print("\t type 3 to leave \t")
+    print("Welcome to HIPPO-CLIENT \n ---- Options: ")
+    print("\t -- 1 to enter in MySql Server \t")
+    print("\t -- 2 to enter in Postgree Server \t")
+    print("\t -- 3 to quit \t")
     print_line(30)
 
 def render_logo():
@@ -32,8 +33,9 @@ def get_data():
 
 def render_options_menu():
     print_line(30)
-    print("\t type 1 to database tree \t")
-    print("\t type 2 to run a query \t")
+    print("---- Options: ")
+    print("\t 1 to see database tree \t")
+    print("\t 2 to run a query \t")
     print_line(30)
     
 def fetch_data():
@@ -53,7 +55,7 @@ def save_data(connection_data):
 
 def logo1():
     hippo = """
-        HIPPO DB
+        HIPPO CLIENT
 
  ⠀⠀⠀⠀⠀⠀⠀⠀⣞⠛⠓⢦⡀⠀⠀⠀⠀⢀⣤⣤⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢉⡽⠟⠊⣩⠉⠑⢲⠞⡹⢊⣩⡇⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
