@@ -60,8 +60,6 @@ def query_database(conn, query, size, choice):
             print(Fore.RED + f"Erro: {err}")
             print(Fore.CYAN)
             return None
-        
-    num_fields = len(cursor.description)
     field_names = [i[0] for i in cursor.description]
     results = cursor.fetchall()
     formated_results = []
@@ -150,7 +148,7 @@ def tree_psql(conn):
         tabelas = cursor.fetchall()
         print("Database:")
         for tabela in tabelas:
-            print(f"|-- {tabela[0]}")
+            print(Fore.RED + f"|-- {tabela[0]}" + Fore.CYAN)
             cursor.execute(f"""
                 SELECT column_name, data_type, character_maximum_length,
                        (SELECT EXISTS (
@@ -173,7 +171,6 @@ def tree_psql(conn):
                 tipo_coluna = f"{coluna[1]}({coluna[2]})" if coluna[2] else coluna[1]
                 print(f"    |-- {coluna[0]}: {tipo_coluna}{chave_primaria}")
         cursor.close()
-
 
 def tree_new(conn):
     cursor = conn.cursor()

@@ -53,7 +53,6 @@ def stored_connection_loop():
 def mysql_connection(connection_data):
     os.system("clear")
     conn = connect_to_database(connection_data)   
-    print(conn)
     if(not conn):
         print("error..")
         return         

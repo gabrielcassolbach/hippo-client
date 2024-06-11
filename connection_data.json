@@ -1,5 +1,4 @@
 {
-    "management-system": "MySQL",
     "host": "localhost",
     "user": "postgres",
     "port": "5432",
