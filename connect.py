@@ -4,17 +4,18 @@ import csv, json
 from decimal import Decimal
 from graphic_engine import print_line
 from colorama import init, Fore, Back, Style
+from tabulate import tabulate
 
 def connect_to_database_psql(connection_data):
     try: 
-        conn2 = psycopg2.connector.connect(
+        conn2 = psycopg2.connect(
             host = connection_data['host'],
             user = connection_data['user'],
             password = connection_data['password'],
             database = connection_data['database'],
             port = connection_data['port']
         )
-        if(conn2.is_connected()):
+        if(conn2):
             print("Conexão bem-sucedida")
             return conn2
     except psycopg2.Error as err:
@@ -39,37 +40,45 @@ def connect_to_database(connection_data):
         print(Fore.CYAN)
         return None
 
-def query_database(conn, query):
+def query_database(conn, query, size, choice):
     if(query == ""): 
         print(Fore.RED + "invalid query")
         print(Fore.CYAN)
         return 0
     cursor = conn.cursor()
-    try:
-        cursor.execute(query) 
-    except mysql.connector.Error as err:
-        print(Fore.RED + "invalid query")
-        print(Fore.CYAN)
-        cursor.close()
-        return 0
+    if(choice == "psql"):
+        try: 
+            cursor.execute(query) 
+        except psycopg2.Error as err:
+            print(Fore.RED + f"Erro: {err}")
+            print(Fore.CYAN)
+            return None
+    else:
+        try: 
+            cursor.execute(query) 
+        except mysql.connector.Error as err:
+            print(Fore.RED + f"Erro: {err}")
+            print(Fore.CYAN)
+            return None
+        
     num_fields = len(cursor.description)
     field_names = [i[0] for i in cursor.description]
     results = cursor.fetchall()
-    print_tables(results, field_names)
+    formated_results = []
+    counter = 1
+    for result in results:
+        if(counter <= size):
+            formated_results.append(result) 
+        counter = counter + 1
+    if(size > 0):
+        print_tables(formated_results, field_names)
+    else: 
+        print_tables(results, field_names)
     cursor.close()
     return 1
 
 def print_tables(results, field_names):
-    print(Fore.GREEN)
-    for field in field_names:
-        print("  | ", end = " ")
-        print(field, end = "\t")
-    print(Fore.CYAN)
-    for row in results:
-        for column in row:
-            print("  | ", end = " ")
-            print(column, end = "\t")
-        print("")
+    print(tabulate(results, headers=field_names, tablefmt="pretty"))
     print("\n")
 
 def export_to_csv(conn, query):
@@ -100,12 +109,24 @@ def export_to_json(conn, query):
     cursor.close()
     conn.close()
 
-def execute_mysql_query(conn):
+def execute_query(conn, choice):
+    while True: 
+        try:
+            size = int(input("\t enter the number of rows of the query or zero to see the full result: (max-limit: 1000): "))
+            if(size >= 0 and size <= 1000):
+                break
+            else:
+                print("invalid input...")
+        except ValueError as err:
+            print(Fore.RED + f"Erro: {err}")
+            print(Fore.CYAN)
+
+
     query = input("\t type your query: ")
-    val = query_database(conn, query)
+    val = query_database(conn, query, size, choice)
     while val != 1: 
         query = input("\t type your query: ")
-        val = query_database(conn, query)
+        val = query_database(conn, query, size, choice)
     while True: 
         print("Do you to store your query data? \n")
         options = (input("\t -- 1 to export data to csv \n\t -- 2 to export data to json \n\t -- 3 to do nothing: \n"))
@@ -123,13 +144,44 @@ def execute_mysql_query(conn):
                 print(Fore.CYAN)
     conn.close()
 
+def tree_psql(conn):
+        cursor = conn.cursor()
+        cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public'")
+        tabelas = cursor.fetchall()
+        print("Database:")
+        for tabela in tabelas:
+            print(f"|-- {tabela[0]}")
+            cursor.execute(f"""
+                SELECT column_name, data_type, character_maximum_length,
+                       (SELECT EXISTS (
+                           SELECT 1 
+                           FROM information_schema.table_constraints tc 
+                           JOIN information_schema.key_column_usage kcu 
+                           ON tc.constraint_name = kcu.constraint_name 
+                           AND tc.table_schema = kcu.table_schema 
+                           WHERE tc.constraint_type = 'PRIMARY KEY' 
+                           AND tc.table_name = '{tabela[0]}' 
+                           AND kcu.column_name = c.column_name
+                       )) AS is_primary
+                FROM information_schema.columns c 
+                WHERE table_name = '{tabela[0]}' 
+                AND table_schema = 'public'
+            """)
+            colunas = cursor.fetchall()
+            for coluna in colunas:
+                chave_primaria = ' (PK)' if coluna[3] else ''
+                tipo_coluna = f"{coluna[1]}({coluna[2]})" if coluna[2] else coluna[1]
+                print(f"    |-- {coluna[0]}: {tipo_coluna}{chave_primaria}")
+        cursor.close()
+
+
 def tree_new(conn):
     cursor = conn.cursor()
     cursor.execute("SHOW TABLES")
     tables = cursor.fetchall()
-    print("Databases: ")
+    print("Database: ")
     for table in tables:
-        print(f"|-- {table[0]}")
+        print(Fore.RED + f"|-- {table[0]}" + Fore.CYAN) 
         cursor.execute(f"DESCRIBE {table[0]}")
         columns = cursor.fetchall()
         for column in columns:

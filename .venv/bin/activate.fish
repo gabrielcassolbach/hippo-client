@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/gabrielbach/Gabriel/work/graphic-db/.venv"
+set -gx VIRTUAL_ENV "/home/gabrielbach/Gabriel/work/hippo-client/.venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

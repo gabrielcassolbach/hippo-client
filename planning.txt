@@ -1,4 +1,0 @@
-Tratamento de erros -> testar, mas, a princípio, está pronto.
-PostgreSQL 
-Views - conferir
-Mostrar todos os dados (limitado a 1000 registros - configurável)

@@ -1,5 +1,6 @@
 import json
 from colorama import init, Fore, Back, Style
+from tabulate import tabulate
 
 def render_menu():
     print_line(30)
@@ -20,7 +21,6 @@ def print_line(size):
 
 def get_data():
     connection_dict = {}
-    connection_dict['management-system'] = "MySQL"
     connection_dict['host'] = input("type your host: ")
     connection_dict['user'] = input("type your user: ")
     connection_dict['port'] = input("type your port: ")

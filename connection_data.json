@@ -1,8 +1,8 @@
 {
     "management-system": "MySQL",
     "host": "localhost",
-    "user": "root",
-    "port": "3306",
-    "password": "root",
-    "database": "University"
+    "user": "postgres",
+    "port": "5432",
+    "password": "password",
+    "database": "university"
 }

@@ -52,7 +52,11 @@ def stored_connection_loop():
 
 def mysql_connection(connection_data):
     os.system("clear")
-    conn = connect_to_database(connection_data)           
+    conn = connect_to_database(connection_data)   
+    print(conn)
+    if(not conn):
+        print("error..")
+        return         
     render_options_menu()
     while True:
         options = input("Select option: ")
@@ -61,16 +65,31 @@ def mysql_connection(connection_data):
                 tree_new(conn)
                 break
             case "2":
-                execute_mysql_query(conn)
+                execute_query(conn, "mysql")
                 break
             case _:
                 print(Fore.RED + "wrong option...")
                 print(Fore.CYAN)
     
 def psql_connection(connection_data):
-    conn = connect_to_database_psql(connection_data)           
-    if(conn):
-        execute_mysql_query(conn)
+    os.system("clear")
+    conn = connect_to_database_psql(connection_data)
+    if(not conn):
+        print("error..")
+        return        
+    render_options_menu()
+    while True:
+        options = input("Select option: ")
+        match options: 
+            case "1":
+                tree_psql(conn)
+                break
+            case "2":
+                execute_query(conn, "psql")
+                break
+            case _:
+                print(Fore.RED + "wrong option...")
+                print(Fore.CYAN)
 
 if __name__ == "__main__":
     main()
