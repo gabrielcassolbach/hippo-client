@@ -26,10 +26,17 @@ def get_data():
     connection_dict['port'] = input("type your port: ")
     connection_dict['password'] = input("type your password: ")
     connection_dict['database'] = input("type your database name: ")
-    choice = int(input("type 1 to save data or 0 otherwise: "))
-    if(choice == 1):
-        save_data(connection_dict)
-    return connection_dict
+    while(True):
+        choice = (input("type 1 to save data or 0 otherwise: "))
+        match(choice):
+            case "1":
+                save_data(connection_dict)
+                return connection_dict
+            case "0":
+                return connection_dict
+            case _: 
+                print(Fore.RED + "invalid input...")
+                print(Fore.CYAN)
 
 def render_options_menu():
     print_line(30)

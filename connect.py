@@ -5,6 +5,7 @@ from decimal import Decimal
 from graphic_engine import print_line
 from colorama import init, Fore, Back, Style
 from tabulate import tabulate
+import os
 
 def connect_to_database_psql(connection_data):
     try: 
@@ -24,6 +25,7 @@ def connect_to_database_psql(connection_data):
         return None
 
 def connect_to_database(connection_data):
+    print("connecting to database...")
     try:
         conn = mysql.connector.connect(
             host = connection_data['host'],
@@ -32,13 +34,18 @@ def connect_to_database(connection_data):
             database = connection_data['database'],
             port = connection_data['port']
         )
+        
         if conn.is_connected():
             print("Conexão bem-sucedida")
             return conn
     except mysql.connector.Error as err:
-        print(Fore.RED + f"Erro: {err}")
-        print(Fore.CYAN)
-        return None
+        if(err):
+            print(Fore.RED + f"Erro: {err}")
+            print(Fore.CYAN)
+            return None
+        else:
+            raise
+            return None
 
 def query_database(conn, query, size, choice):
     if(query == ""): 
@@ -110,7 +117,10 @@ def export_to_json(conn, query):
 def execute_query(conn, choice):
     while True: 
         try:
-            size = int(input("\t enter the number of rows of the query or zero to see the full result: (max-limit: 1000): "))
+            print("\t Select how many lines of the query result you want to see: ")
+            print("\t 0 - To see the full result. ")
+            print("\t A number between 1 to 1000 - To see a partial result. \n")
+            size = int(input("\t Select: "))
             if(size >= 0 and size <= 1000):
                 break
             else:
@@ -119,14 +129,14 @@ def execute_query(conn, choice):
             print(Fore.RED + f"Erro: {err}")
             print(Fore.CYAN)
 
-
+    os.system("clear")
     query = input("\t type your query: ")
     val = query_database(conn, query, size, choice)
     while val != 1: 
         query = input("\t type your query: ")
         val = query_database(conn, query, size, choice)
     while True: 
-        print("Do you to store your query data? \n")
+        print("Do you want to store your query data? \n")
         options = (input("\t -- 1 to export data to csv \n\t -- 2 to export data to json \n\t -- 3 to do nothing: \n"))
         match(options): 
             case "1":
